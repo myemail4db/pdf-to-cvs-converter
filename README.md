@@ -4,8 +4,8 @@
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.4.2-6DB33F?logo=springboot)
 ![Maven](https://img.shields.io/badge/Maven-3.9.12-C71A36?logo=apachemaven)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
-![Year](https://img.shields.io/date?label=Current%20Year&format=YYYY)
-![Build](https://github.com/myemail4db/pdf-to-csv-converter/actions/workflows/maven.yml/badge.svg)
+![Last Commit](https://img.shields.io/github/last-commit/myemail4db/pdf-to-cvs-converter)
+[![Build](https://github.com/myemail4db/pdf-to-cvs-converter/actions/workflows/maven.yml/badge.svg)](https://github.com/myemail4db/pdf-to-cvs-converter/actions/workflows/maven.yml)
 [![JavaDoc](https://img.shields.io/badge/JavaDoc-Online-blue)](./docs/javadoc/index.html)
 ![Author](https://img.shields.io/badge/Author-Dominick%20Benigno-0d6efd)
 
