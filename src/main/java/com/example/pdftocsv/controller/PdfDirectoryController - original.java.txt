@@ -1,0 +1,115 @@
+package com.example.pdftocsv.controller;
+
+import com.example.pdftocsv.service.PdfToCsvService;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.File;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+/**
+ * REST controller for:
+ * - Listing PDF files in a configured directory
+ * - Converting a selected PDF file to CSV
+ */
+@RestController
+@RequestMapping("/api/dir")
+public class PdfDirectoryController {
+
+    private final PdfToCsvService pdfToCsvService;
+
+    /**
+     * Directory that contains the source PDF files.
+     * Set in application.properties as pdf.input.dir
+     */
+    @Value("${pdf.input.dir}")
+    private String inputDir;
+
+    public PdfDirectoryController(PdfToCsvService pdfToCsvService) {
+        this.pdfToCsvService = pdfToCsvService;
+    }
+
+    /**
+     * List all .pdf files in the configured input directory.
+     *
+     * GET /api/dir/pdfs
+     */
+    @GetMapping("/pdfs")
+    public ResponseEntity<List<String>> listPdfs() {
+        File dir = new File(inputDir);
+        if (!dir.exists() || !dir.isDirectory()) {
+            return ResponseEntity.badRequest()
+                    .body(List.of("Input directory does not exist or is not a directory: " + inputDir));
+        }
+
+        File[] pdfFiles = dir.listFiles((d, name) -> name.toLowerCase().endsWith(".pdf"));
+        if (pdfFiles == null) {
+            return ResponseEntity.ok(List.of());
+        }
+
+        List<String> names = Arrays.stream(pdfFiles)
+                .map(File::getName)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(names);
+    }
+
+    /**
+     * Convert one selected PDF from the directory into CSV and download it.
+     *
+     * GET /api/dir/pdf-to-csv?fileName=somefile.pdf
+     */
+    @GetMapping("/pdf-to-csv")
+    public ResponseEntity<Resource> convertPdfFromDir(@RequestParam("fileName") String fileName) {
+        try {
+            File dir = new File(inputDir);
+            if (!dir.exists() || !dir.isDirectory()) {
+                return ResponseEntity.badRequest()
+                        .contentType(MediaType.TEXT_PLAIN)
+                        .body(new ByteArrayResource(
+                                ("Input directory does not exist: " + inputDir).getBytes()
+                        ));
+            }
+
+            File pdfFile = new File(dir, fileName);
+            if (!pdfFile.exists() || !pdfFile.isFile()) {
+                return ResponseEntity.badRequest()
+                        .contentType(MediaType.TEXT_PLAIN)
+                        .body(new ByteArrayResource(
+                                ("PDF file not found in directory: " + fileName).getBytes()
+                        ));
+            }
+
+            byte[] csvBytes = pdfToCsvService.convertFormFieldsToCsv(pdfFile);
+
+            String baseName = fileName;
+            int dotIndex = baseName.lastIndexOf('.');
+            if (dotIndex > 0) {
+                baseName = baseName.substring(0, dotIndex);
+            }
+            String csvFileName = baseName + ".csv";
+
+            ByteArrayResource resource = new ByteArrayResource(csvBytes);
+
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + csvFileName + "\"")
+                    .contentType(MediaType.parseMediaType("text/csv"))
+                    .contentLength(csvBytes.length)
+                    .body(resource);
+
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                    .contentType(MediaType.TEXT_PLAIN)
+                    .body(new ByteArrayResource(
+                            ("Error converting PDF to CSV: " + e.getMessage()).getBytes()
+                    ));
+        }
+    }
+}

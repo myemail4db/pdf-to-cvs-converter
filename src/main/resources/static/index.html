@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h3>Select PDF from directory</h3>
+
+<select id="pdfList"></select>
+<button onclick="convert()">Convert</button>
+
+<script>
+async function loadFiles() {
+    const res = await fetch('/api/dir/pdfs');
+    const files = await res.json();
+
+    const select = document.getElementById('pdfList');
+    files.forEach(f => {
+        const opt = document.createElement('option');
+        opt.value = f;
+        opt.textContent = f;
+        select.appendChild(opt);
+    });
+}
+
+async function convert() {
+    const file = document.getElementById('pdfList').value;
+    window.location.href = '/api/dir/pdf-to-csv?fileName=' + file;
+}
+
+loadFiles();
+</script>
+
+</body>
+</html>
