@@ -1,4 +1,4 @@
-# 📄 PDF to CSV Converter (Spring Boot + PDFBox)
+# PDF to CSV Converter (Spring Boot + PDFBox)
 
 A Spring Boot application that extracts AcroForm fields from PDF documents and converts them into a clean CSV file.
 
@@ -14,15 +14,15 @@ Perfect for backend portfolio demonstration.
 
 ---
 
-# 🚀 Features
+# Features
 
-## ✔ Convert PDF → CSV
+## Convert PDF → CSV
 Extracts all AcroForm fields and generates a clean CSV file.
 
-## ✔ Directory-based PDF loading
+## Directory-based PDF loading
 The app scans a local directory automatically for .pdf files.
 
-## ✔ Option 3: Clickable UI — Select & Convert Instantly
+## Option 3: Clickable UI — Select & Convert Instantly
 
 Your homepage (index.html) now shows:
 - A list of PDFs from the configured directory
@@ -32,12 +32,12 @@ Your homepage (index.html) now shows:
 
 A great UX for demos and portfolios.
 
-## ✔ REST Endpoints
+## REST Endpoints
 - GET /api/dir/pdfs – List PDFs in configured directory
 - GET /api/dir/pdf-to-csv?fileName= – Convert one PDF
 - POST /api/upload – (Optional) Upload a PDF to convert
 
-## ✔ Test Coverage
+## Test Coverage
 Comprehensive tests covering:
 - Service logic
 - Controller logic
@@ -49,7 +49,7 @@ Comprehensive tests covering:
 
 ---
 
-# ⚙️ Configuration
+# Configuration
 Edit your input directory in:
 
 ```css
@@ -66,7 +66,7 @@ Place your PDFs inside this folder.
 
 ---
 
-# 🖥️ Click-to-Convert Web UI
+# Click-to-Convert Web UI
 This app includes a simple static UI that loads automatically at:
 
 ```arduino
@@ -100,7 +100,7 @@ Simple, clean, intuitive.
 
 ---
 
-# 🧪 Testing
+# Testing
 Run:
 
 ```
@@ -118,7 +118,7 @@ Tests include:
 
 ---
 
-# ▶️ Run the Application
+# Run the Application
 
 ```bash
 mvn spring-boot:run
@@ -134,7 +134,7 @@ You’ll see your clickable PDF list.
 
 ---
 
-# 📦 Build JAR
+# Build JAR
 
 ```bash
 mvn clean package
@@ -148,7 +148,7 @@ java -jar target/pdf-to-cvs-converter-0.0.1-SNAPSHOT.jar
 
 ---
 
-# 📚 Technologies Used
+# Technologies Used
 - Java 21
 - Spring Boot 3
 - PDFBox (2.x)
